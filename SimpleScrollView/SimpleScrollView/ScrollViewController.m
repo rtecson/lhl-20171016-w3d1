@@ -9,24 +9,43 @@
 #import "ScrollViewController.h"
 
 @interface ScrollViewController ()<UIScrollViewDelegate>
-@property (nonatomic) UIImageView *imageView;
+@property (strong, nonatomic) UIImageView *imageView;
+@property (strong, nonatomic) UIScrollView *scrollView;
 @end
 
 @implementation ScrollViewController
+
+// MARK: - UIViewController methods
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:self.view.frame];
-    [self.view addSubview:scrollView];
+    // Set up scrollview and its content here if not doing
+    // it in storyboard
+    self.scrollView = [[UIScrollView alloc] initWithFrame:self.view.frame];
+    [self.view addSubview:self.scrollView];
     self.imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"cats"]];
-    [scrollView addSubview:self.imageView];
-    scrollView.contentSize = self.imageView.bounds.size;
-    scrollView.delegate = self;
-    scrollView.minimumZoomScale = 0.25;
-    scrollView.maximumZoomScale = 3.0;
+    [self.scrollView addSubview:self.imageView];
+    self.scrollView.contentSize = self.imageView.bounds.size;
+    self.scrollView.delegate = self;
+    self.scrollView.minimumZoomScale = 0.25;
+    self.scrollView.maximumZoomScale = 3.0;
 }
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+}
+
+- (void)viewDidLayoutSubviews
+{
+    // Adjust frame of scrollview each time the view changes layout (i.e. rotating)
+    self.scrollView.frame = self.view.frame;
+}
+
+
+// MARK: UIScrollViewDelegate methods
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
@@ -52,13 +71,11 @@
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
 {
+    // Must return the view for zooming in and out here
+    // If this delegate method is not defined, then
+    // Zoom In/Out will not work
     NSLog(@"In viewForZoomingInScrollView");
     return self.imageView;
 }
-
-
-
-
-
 
 @end

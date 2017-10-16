@@ -31,6 +31,11 @@
     [self createPageControl];
 }
 
+- (void)viewDidLayoutSubviews
+{
+    self.scrollView.frame = self.view.frame;
+}
+
 - (void)createImageViews
 {
     self.imageView1 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"toronto"]];
@@ -55,17 +60,19 @@
     [self.imageView1.leadingAnchor constraintEqualToAnchor:self.scrollView.leadingAnchor].active = YES;
     [self.imageView2.trailingAnchor constraintEqualToAnchor:self.scrollView.trailingAnchor].active = YES;
     
+    [self.imageView1.trailingAnchor constraintEqualToAnchor:self.imageView2.leadingAnchor].active = YES;
+    
     // width and height
     [self.imageView1.heightAnchor constraintEqualToAnchor:self.view.heightAnchor].active = YES;
     [self.imageView2.heightAnchor constraintEqualToAnchor:self.view.heightAnchor].active = YES;
-    
+
     [self.imageView1.widthAnchor constraintEqualToAnchor:self.view.widthAnchor].active = YES;
     [self.imageView2.widthAnchor constraintEqualToAnchor:self.view.widthAnchor].active = YES;
     
-    [self.imageView1.trailingAnchor constraintEqualToAnchor:self.imageView2.leadingAnchor].active = YES;
 }
 
-#define pageControlHeight 20.0
+//#define pageControlHeight 20.0
+static const CGFloat pageControlHeight = 20.0f;  // Better way to define constants vs #define
 
 - (void)createPageControl
 {
